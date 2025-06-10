@@ -1,0 +1,144 @@
+services:
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress:1337.42
+    build:
+      context: ./requirements/wordpress
+    depends_on:
+      - mariadb
+      - redis
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    networks:
+      - network
+    secrets:
+      - db_password
+      - credentials
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:1337.42
+    build: ./requirements/mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - network
+    restart: always
+    env_file:
+      - .env
+    secrets:
+      - db_password
+      - db_root_password
+
+  nginx:
+    container_name: nginx
+    image: nginx:1337.42
+    build: ./requirements/nginx
+    depends_on:
+      - wordpress
+    ports:
+      - 443:443
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    restart: always
+    networks:
+      - network
+
+  redis:
+    container_name: redis
+    image: redis:1337.42
+    build: ./requirements/bonus/redis
+    restart: always
+    networks:
+      - network
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  vsftpd:
+    container_name: vsftpd
+    image: vsftpd:1337.42
+    build: ./requirements/bonus/vsftpd
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    restart: always
+    networks:
+      - network
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    env_file:
+      - .env
+    secrets:
+      - credentials
+
+  adminer:
+    container_name: adminer
+    image: adminer:1337.42
+    build: ./requirements/bonus/adminer
+    restart: always
+    ports:
+      - "9090:9090"
+    networks:
+      - network
+    depends_on:
+      - mariadb
+
+  website:
+    container_name: website
+    image: website:1337.42
+    build: ./requirements/bonus/website
+    networks:
+      - network
+    ports:
+      - "80:80"
+    restart: always
+
+  portainer:
+    container_name: portainer
+    image: portainer:1337.42
+    build: ./requirements/bonus/portainer
+    ports:
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - network
+    restart: always
+
+volumes:
+  wordpress_data:
+    driver_opts:
+      type: none
+      o: bind
+      # device: /home/aaghzal/data/wordpress
+      device: ./wordpress
+  redis_data:
+    driver_opts:
+      type: none
+      o: bind
+      # device: /home/aaghzal/data/redis
+      device: ./redis
+  mariadb_data:
+    driver_opts:
+      type: none
+      o: bind
+      # device: /home/aaghzal/data/mariadb
+      device: ./mariadb
+
+networks:
+  network:
+    driver: bridge
+
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
+  credentials:
+    file: ../secrets/credentials.txt
