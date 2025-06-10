@@ -1,5 +1,4 @@
 services:
-
   wordpress:
     container_name: wordpress
     image: wordpress:1337.42
@@ -8,7 +7,7 @@ services:
     depends_on:
       - mariadb
       - redis
-    restart: always
+    restart: on-failure
     env_file:
       - .env
     volumes:
@@ -27,7 +26,7 @@ services:
       - mariadb_data:/var/lib/mysql
     networks:
       - network
-    restart: always
+    restart: on-failure
     env_file:
       - .env
     secrets:
@@ -44,7 +43,7 @@ services:
       - 443:443
     volumes:
       - wordpress_data:/var/www/html/wordpress
-    restart: always
+    restart: on-failure
     networks:
       - network
 
@@ -52,7 +51,7 @@ services:
     container_name: redis
     image: redis:1337.42
     build: ./requirements/bonus/redis
-    restart: always
+    restart: on-failure
     networks:
       - network
     ports:
@@ -67,7 +66,7 @@ services:
     ports:
       - "21:21"
       - "21000-21010:21000-21010"
-    restart: always
+    restart: on-failure
     networks:
       - network
     volumes:
@@ -81,9 +80,9 @@ services:
     container_name: adminer
     image: adminer:1337.42
     build: ./requirements/bonus/adminer
-    restart: always
+    restart: on-failure
     ports:
-      - "9090:9090"
+      - "8088:8088"
     networks:
       - network
     depends_on:
@@ -97,7 +96,7 @@ services:
       - network
     ports:
       - "80:80"
-    restart: always
+    restart: on-failure
 
   portainer:
     container_name: portainer
@@ -109,27 +108,24 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - network
-    restart: always
+    restart: on-failure
 
 volumes:
   wordpress_data:
     driver_opts:
       type: none
       o: bind
-      # device: /home/aaghzal/data/wordpress
-      device: ./wordpress
+      device: /home/aaghzal/data/wordpress
   redis_data:
     driver_opts:
       type: none
       o: bind
-      # device: /home/aaghzal/data/redis
-      device: ./redis
+      device: /home/aaghzal/data/redis
   mariadb_data:
     driver_opts:
       type: none
       o: bind
-      # device: /home/aaghzal/data/mariadb
-      device: ./mariadb
+      device: /home/aaghzal/data/mariadb
 
 networks:
   network:

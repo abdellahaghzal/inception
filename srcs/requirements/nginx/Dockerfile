@@ -1,5 +1,4 @@
-# Use Debian 12.8 as the base image
-FROM debian:12
+FROM debian:11
 
 RUN apt update
 RUN apt install -y nginx openssl

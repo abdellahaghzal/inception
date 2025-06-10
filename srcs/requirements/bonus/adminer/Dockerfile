@@ -1,13 +1,15 @@
-FROM debian:12
+FROM debian:11
 
-RUN apt-get update && \
-    apt-get install -y php php-mysql wget
+RUN apt-get update
+RUN apt-get install -y php \
+                       php-mysql \
+                       wget
 
 COPY ./tools/adminer.sh /tmp/adminer.sh
 RUN chmod +x /tmp/adminer.sh
 
 WORKDIR /var/www/html/
 
-EXPOSE 9090
+EXPOSE 8088
 
 CMD ["sh", "/tmp/adminer.sh"]
