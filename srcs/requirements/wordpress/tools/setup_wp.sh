@@ -24,9 +24,6 @@ else
 
     wp user create "$EDITOR_USER" "$EDITOR_USER@1337.com" --user_pass="${USER_PASSWORD}" --role=editor --allow-root
 
-    wp theme install saaslauncher --allow-root
-    wp theme activate saaslauncher --allow-root
-
     wp config set WP_REDIS_HOST 'redis' --allow-root
     wp config set WP_CACHE 'true' --raw --allow-root
     wp plugin install redis-cache --activate --allow-root
