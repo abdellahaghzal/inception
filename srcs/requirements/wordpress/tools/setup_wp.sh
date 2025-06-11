@@ -19,7 +19,7 @@ else
     cd /var/www/html/wordpress
     wp config create --dbname="${DB_NAME}" --dbuser="${DB_USER}" --dbpass="${DB_PASSWORD}" --dbhost="${DB_HOST}" --allow-root
 
-    wp core install --url="10.11.248.74" --title="${TITLE}" --admin_user="${ADMIN_USER}" \
+    wp core install --url="localhost" --title="${TITLE}" --admin_user="${ADMIN_USER}" \
        --admin_password="${ADMIN_PASSWORD}" --admin_email="${ADMIN_EMAIL}" --allow-root
 
     wp user create "$EDITOR_USER" "$EDITOR_USER@1337.com" --user_pass="${USER_PASSWORD}" --role=editor --allow-root
