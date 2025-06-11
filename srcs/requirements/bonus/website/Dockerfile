@@ -1,6 +1,7 @@
 FROM debian:11
 
-RUN apt update && apt install -y nginx openssl && apt clean
+RUN apt-get update
+RUN apt-get install -y nginx openssl
 
 COPY files/ /var/www/html/
 

@@ -2,13 +2,9 @@ FROM debian:11
 
 RUN apt-get update
 RUN apt-get -y install wget \
-                       php7.4 \
                        php7.4-fpm \
                        php7.4-mysql \
-                       php7.4-pdo \
-                       php7.4-mbstring \
-                       curl \
-                       less
+                       curl
 
 RUN mkdir -p /run/php && sed -i "s/^listen = .*/listen = 0.0.0.0:9000/" /etc/php/7.4/fpm/pool.d/www.conf
 

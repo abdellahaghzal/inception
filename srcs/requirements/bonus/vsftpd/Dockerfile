@@ -1,8 +1,7 @@
 FROM debian:11
 
-RUN apt update -y
-
-RUN apt install -y vsftpd
+RUN apt-get update -y
+RUN apt-get install -y vsftpd
 
 RUN mkdir -p /var/run/vsftpd/empty
 

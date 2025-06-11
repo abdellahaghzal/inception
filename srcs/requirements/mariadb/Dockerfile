@@ -2,8 +2,8 @@ FROM debian:11
 
 WORKDIR /mariadb
 
-RUN apt update
-RUN apt install mariadb-server -y
+RUN apt-get update
+RUN apt-get install mariadb-server -y
 
 COPY tools/setup_mariadb.sh .
 

@@ -3,8 +3,8 @@
 echo "Setting up TLS..."
 
 SSL_DIR=/etc/nginx/ssl
-CERT_FILE=${SSL_DIR}/server.crt
-KEY_FILE=${SSL_DIR}/server.key
+CERT_FILE=${SSL_DIR}/inception.crt
+KEY_FILE=${SSL_DIR}/inception.key
 
 if [ -f "${CERT_FILE}" ] && [ -f "${KEY_FILE}" ]; then
     echo "SSL certificate already exists."

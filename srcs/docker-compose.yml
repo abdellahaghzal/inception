@@ -2,8 +2,7 @@ services:
   wordpress:
     container_name: wordpress
     image: wordpress:1337.42
-    build:
-      context: ./requirements/wordpress
+    build: ./requirements/wordpress
     depends_on:
       - mariadb
       - redis
@@ -13,7 +12,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html/wordpress
     networks:
-      - network
+      - inception
     secrets:
       - db_password
       - credentials
@@ -25,7 +24,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
-      - network
+      - inception
     restart: on-failure
     env_file:
       - .env
@@ -45,7 +44,9 @@ services:
       - wordpress_data:/var/www/html/wordpress
     restart: on-failure
     networks:
-      - network
+      - inception
+    env_file:
+      - .env
 
   redis:
     container_name: redis
@@ -53,7 +54,7 @@ services:
     build: ./requirements/bonus/redis
     restart: on-failure
     networks:
-      - network
+      - inception
     ports:
       - "6379:6379"
     volumes:
@@ -68,7 +69,7 @@ services:
       - "21000-21010:21000-21010"
     restart: on-failure
     networks:
-      - network
+      - inception
     volumes:
       - wordpress_data:/var/www/html/wordpress
     env_file:
@@ -84,7 +85,7 @@ services:
     ports:
       - "8088:8088"
     networks:
-      - network
+      - inception
     depends_on:
       - mariadb
 
@@ -93,7 +94,7 @@ services:
     image: website:1337.42
     build: ./requirements/bonus/website
     networks:
-      - network
+      - inception
     ports:
       - "80:80"
     restart: on-failure
@@ -107,7 +108,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - network
+      - inception
     restart: on-failure
 
 volumes:
@@ -128,7 +129,7 @@ volumes:
       device: /home/aaghzal/data/mariadb
 
 networks:
-  network:
+  inception:
     driver: bridge
 
 secrets:
